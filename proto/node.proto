@@ -1,0 +1,105 @@
+syntax                                            = "proto3";
+
+message NodeInfo 
+{
+    bytes                   pub                   = 1;
+    bytes                   sign                  = 2;
+    string                  base58addr            = 3;
+    string                  public_base58addr     = 4;
+    uint32                  local_ip             = 5;
+    uint32                  listen_port           = 6;
+    uint32                  public_ip             = 7;
+    uint32                  public_port           = 8;
+    bool                    is_public_node        = 9;
+    uint32                  height                = 10;
+    uint64                  sign_fee              = 11;
+    uint64                  package_fee           = 12;
+    string                  version               = 13;
+}
+
+//向转发节点获取所有节点
+message RegisterNodeReq 
+{
+    NodeInfo                node                = 1;
+    bool                    is_get_nodelist       = 2;
+}
+
+//向转发节点获取所有节点 返回
+message RegisterNodeAck 
+{
+    repeated NodeInfo       nodes                 = 1;
+}
+
+//同步节点
+message SyncNodeReq 
+{
+    repeated string         base58addrs           = 1;
+    repeated NodeInfo       nodes                 = 2;  //连接自身节点的内网节点
+}
+
+//同步节点返回
+message SyncNodeAck 
+{
+    repeated NodeInfo       nodes                 = 1;  //公网有我没有的节点
+    repeated string         base58addrs           = 2;  //我有公网没有的节点id
+}
+
+//向对等节点发起连接请求
+message ConnectNodeReq 
+{
+    NodeInfo                node                  = 1;
+}
+
+//通过外网转发数据请求
+message TransMsgReq 
+{
+    NodeInfo                dest                  = 1;
+    bytes                   data                  = 2;
+    uint32                  priority              = 3;
+}
+
+message BroadcaseMsgReq
+{
+    NodeInfo                from                  = 1;
+    bytes                   data                  = 2;
+    uint32                  priority              = 3;
+}
+
+message PingReq 
+{
+    string                  base58addr            = 1;
+}
+
+message PongReq 
+{
+    string                  base58addr            = 1;
+    uint32                  height                = 2;
+}
+
+message EchoReq
+{
+    string                  base58addr            = 1;
+}
+
+message EchoAck
+{
+    string                  base58addr            = 1;
+}
+
+message UpdateFeeReq 
+{
+    string                  base58addr            = 1;
+    uint64                  fee                   = 2;
+}
+
+message UpdatePackageFeeReq 
+{
+    string                  base58addr            = 1;
+    uint64                  package_fee           = 2;
+}
+
+message NodeHeightChangedReq
+{
+    string                  base58addr            = 1;
+    uint32                  height                = 2;
+}
